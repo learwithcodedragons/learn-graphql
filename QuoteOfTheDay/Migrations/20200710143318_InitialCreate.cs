@@ -12,7 +12,7 @@ namespace QuoteOfTheDay.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    QuoteCategory = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,18 +42,18 @@ namespace QuoteOfTheDay.Migrations
 
             migrationBuilder.InsertData(
                 table: "Categories",
-                columns: new[] { "Id", "QuoteCategory" },
-                values: new object[] { 1, 0 });
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "Inspirational" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
-                columns: new[] { "Id", "QuoteCategory" },
-                values: new object[] { 2, 1 });
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 2, "Funny" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
-                columns: new[] { "Id", "QuoteCategory" },
-                values: new object[] { 3, 2 });
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 3, "Dark" });
 
             migrationBuilder.InsertData(
                 table: "Quotes",

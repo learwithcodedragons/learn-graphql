@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using QuoteOfTheDay.Data;
 using QuoteOfTheDay.GraphQL;
 
@@ -45,14 +41,16 @@ namespace QuoteOfTheDay
             services.AddDbContext<QuoteOfTheDayDbContext>(
                 options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddScoped<QuoteRepository>();
+            services.AddScoped<CategoryRepository>();
 
             services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(
                 s.GetRequiredService));
             services.AddScoped<QuoteOfTheDaySchema>();
             services.AddGraphQL(options =>
-            {
-                options.ExposeExceptions = true;
-            }).AddGraphTypes(ServiceLifetime.Scoped);
+                {
+                    options.ExposeExceptions = true;
+                })
+                .AddGraphTypes(ServiceLifetime.Scoped);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

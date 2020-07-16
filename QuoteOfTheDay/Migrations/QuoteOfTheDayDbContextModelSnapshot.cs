@@ -25,8 +25,8 @@ namespace QuoteOfTheDay.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("QuoteCategory")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -36,17 +36,17 @@ namespace QuoteOfTheDay.Migrations
                         new
                         {
                             Id = 1,
-                            QuoteCategory = 0
+                            Name = "Inspirational"
                         },
                         new
                         {
                             Id = 2,
-                            QuoteCategory = 1
+                            Name = "Funny"
                         },
                         new
                         {
                             Id = 3,
-                            QuoteCategory = 2
+                            Name = "Dark"
                         });
                 });
 

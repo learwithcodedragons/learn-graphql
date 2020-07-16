@@ -8,7 +8,8 @@ namespace QuoteOfTheDay.Data
     public class QuoteOfTheDayDbContext : DbContext
     {
         public QuoteOfTheDayDbContext(DbContextOptions<QuoteOfTheDayDbContext> options) : base(options)
-        { }
+        {
+        }
 
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Category> Categories { get; set; }

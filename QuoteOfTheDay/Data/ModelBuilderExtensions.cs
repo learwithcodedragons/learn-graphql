@@ -16,18 +16,18 @@ namespace QuoteOfTheDay.Data
                     new 
                     {
                         Id = 1,
-                        QuoteCategory = QuoteCategory.Inspirational
+                        Name = "Inspirational"
                     },
                     
                     new
                     {
                         Id = 2,
-                        QuoteCategory = QuoteCategory.Funny
+                        Name = "Funny"
                     },
                     new
                     {
                         Id = 3,
-                        QuoteCategory = QuoteCategory.Dark
+                        Name = "Dark"
                     },
                 });
         
