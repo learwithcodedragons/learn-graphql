@@ -4,7 +4,6 @@ using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using QuoteOfTheDay.Data;
@@ -38,8 +37,6 @@ namespace QuoteOfTheDay
             });
 
             services.AddMvc();
-            services.AddDbContext<QuoteOfTheDayDbContext>(
-                options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddScoped<QuoteRepository>();
             services.AddScoped<CategoryRepository>();
 

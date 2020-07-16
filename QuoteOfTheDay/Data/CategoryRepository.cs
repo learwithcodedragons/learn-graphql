@@ -1,38 +1,45 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
+using Dapper;
+using Dapper.Contrib.Extensions;
+using Microsoft.Extensions.Configuration;
 using QuoteOfTheDay.Domain;
 
 namespace QuoteOfTheDay.Data
 {
-    public class CategoryRepository
+    public class CategoryRepository : BaseRepository
     {
-        private readonly QuoteOfTheDayDbContext _dbContext;
 
-        public CategoryRepository(QuoteOfTheDayDbContext dbContext)
+        public CategoryRepository(IConfiguration configuration) : base(configuration)
         {
-            _dbContext = dbContext;
         }
 
         public IEnumerable<Category> GetAll()
         {
-            return _dbContext.Categories;
+            using SqlConnection connection = new SqlConnection(ConnectionString);
+            var categories = connection.GetAll<Category>();
+            return categories;
         }
 
         public Category GetById(int id)
         {
-            var category = _dbContext.Find<Category>(id);
+            using SqlConnection connection = new SqlConnection(ConnectionString);
+
+            var category = connection.Get<Category>(id);
             return category;
         }
 
         public Category GetByQuoteId(int id)
         {
-            var category = _dbContext.Quotes.Include(q => q.Category)
-                .SingleOrDefault(q => q.Id == id)
-                ?.Category;
-             return category;
+            const string sql = @"SELECT c.Id, c.Name FROM Quotes q
+                                 JOIN Categories c
+                                 ON  q.CategoryId = c.Id
+                                 WHERE q.Id = @Id";
+            
+            using SqlConnection connection = new SqlConnection(ConnectionString);
+
+            var category = connection.QueryFirst<Category>(sql, new { Id = id});
+            return category;
         }
     }
 }
