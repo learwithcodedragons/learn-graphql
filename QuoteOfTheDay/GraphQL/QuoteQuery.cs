@@ -32,18 +32,43 @@ namespace QuoteOfTheDay.GraphQL
                     // The current SQL query if author and text requested in GraphQL query is:
                     // SELECT quotes.Author, quotes.Text
                     // FROM Quotes quotes
-
                     var quoteMapper = new QuoteEntityMapper();
 
-                    using (var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]))
-                    {
-
-                        var results 
-                            = query.Execute( connection, context.FieldAst, quoteMapper)
-                                .Distinct();
-                        return results;
-                    }
+                    using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+                    var results 
+                        = query.Execute( connection, context.FieldAst, quoteMapper)
+                            .Distinct();
+                    return results;
                 });
+
+               Field<QuoteType>(
+                   "quote",
+                   arguments: new QueryArguments(
+                       new QueryArgument<NonNullGraphType<IdGraphType>>
+                       {
+                           Name = "id"
+                       }),
+                   resolve: context =>
+                   {
+                       var alias = "quotes";
+                       var id = context.GetArgument<int>("id");
+
+                       var query = SqlBuilder
+                           .From($"Quotes {alias}")
+                           .OrderBy($"{alias}.id")
+                           .Where($"{alias}.id = {id}");
+
+                       query = quoteQueryBuilder.Build(query, context.FieldAst, alias);
+                       var quoteMapper = new QuoteEntityMapper();
+
+                       using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+                       var results
+                           = query.Execute(connection, context.FieldAst, quoteMapper)
+                               .Distinct().FirstOrDefault();
+                       return results;
+                   });
+
+
         }
     }
 }
