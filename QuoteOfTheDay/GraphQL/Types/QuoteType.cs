@@ -1,18 +1,20 @@
-﻿using GraphQL.DataLoader;
-using GraphQL.Types;
-using QuoteOfTheDay.Data;
+﻿using GraphQL.Types;
 using QuoteOfTheDay.Domain;
 
 namespace QuoteOfTheDay.GraphQL.Types
 {
     public class QuoteType : ObjectGraphType<Quote>
     {
-        public QuoteType(CategoryRepository categoryRepository)
+        public QuoteType()
         {
-            Field(t => t.Id);
-            Field(t => t.Author).Description("The name of the person that the quote is attributed to");
-            Field(t => t.Text).Description("The text of the quote");
-            Field<CategoryType>("category", resolve: context => categoryRepository.GetByQuoteId(context.Source.Id));
+            Field(quote => quote.Id);
+            Field(quote => quote.Author).Description("The name of the person that the quote is attributed to");
+            Field(quote => quote.Text).Description("The text of the quote");
+            Field<CategoryType>(
+                "category",
+                "The type of quote",
+                resolve: context => context.Source?.Category);
         }
+
     }
 }

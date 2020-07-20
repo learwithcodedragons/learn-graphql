@@ -36,9 +36,7 @@ namespace QuoteOfTheDay.Data
         {
             await using SqlConnection connection = new SqlConnection(ConnectionString);
             var id = await connection.InsertAsync(quote);
-
-            quote.Id = id;
-            return quote;
+            return GetById(id);
         }
     }
 }

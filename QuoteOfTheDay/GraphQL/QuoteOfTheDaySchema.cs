@@ -6,10 +6,10 @@ namespace QuoteOfTheDay.GraphQL
 {
     public class QuoteOfTheDaySchema: Schema
     {
-        public QuoteOfTheDaySchema(IDependencyResolver resolver): base(resolver)
+        public QuoteOfTheDaySchema(QuoteQuery query, QuoteMutation mutation)
         {
-            Query = resolver.Resolve<QuoteQuery>();
-            Mutation = resolver.Resolve<QuoteMutation>();
+            Query = query;
+            Mutation = mutation;
         }
     }
 }
